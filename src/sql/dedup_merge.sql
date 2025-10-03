@@ -2,7 +2,7 @@
 WITH dedup AS (
   SELECT
     *, ROW_NUMBER() OVER (PARTITION BY store_id, event_id ORDER BY ts DESC) AS rn
-  FROM silver.events_source  -- replace with your source table
+  FROM silver.events_source  
 )
 MERGE INTO gold.events AS g
 USING (SELECT * FROM dedup WHERE rn = 1) AS s
