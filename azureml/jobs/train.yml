@@ -1,0 +1,19 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+type: command
+display_name: nearmiss_lightgbm_train
+experiment_name: nearmiss_lightgbm
+code: ../../
+command: >-
+  python src/ml/train_lightgbm.py
+  --train_csv ${{inputs.train_data}}
+  --out_dir ${{outputs.model_dir}}
+environment:
+  conda_file: ../../env/conda.yml
+compute: azureml:cpu-cluster   # <-- change to your compute
+inputs:
+  train_data:
+    type: uri_file
+    path: azureml://datastores/workspaceblobstore/paths/nearmiss/events.csv
+outputs:
+  model_dir:
+    type: uri_folder
